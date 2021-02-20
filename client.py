@@ -35,3 +35,4 @@ while connected:
         s.send(message.encode())
         connected = False
     s.send(message.encode())
+s.close()
