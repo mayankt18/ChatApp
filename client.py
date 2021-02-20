@@ -8,6 +8,7 @@ s_host = input("Enter server IP address: ")
 name = input("Enter your name: ")
 
 port = 6969
+buff = 1024
 
 print("Trying to connect to server...")
 
@@ -16,7 +17,7 @@ print("connected...")
 
 s.send(name.encode())
 
-s_name = s.recv(1024)
+s_name = s.recv(buff)
 s_name = s_name.decode()
 print(f"{s_name} has joined...")
 print("Enter !bye to exit.")
@@ -24,7 +25,7 @@ print("Enter !bye to exit.")
 
 connected = True
 while connected:
-    message = s.recv(1024)
+    message = s.recv(buff)
     message = message.decode()
     print(s_name, '> ', message)
     
