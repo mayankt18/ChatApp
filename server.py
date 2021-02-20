@@ -8,6 +8,7 @@ host_name = socket.gethostname()
 ip = socket.gethostbyname(host_name)
 
 port = 6969
+buff = 1024
 
 s.bind((host_name,port))
 print(host_name , ip)
@@ -21,7 +22,7 @@ c , addr = s.accept()
 print(f"Received connection form {addr}")
 print("connection established")
 
-c_name = c.recv(1024)
+c_name = c.recv(buff)
 c_name = c_name.decode()
 print(f"{c_name} has connected")
 
@@ -37,6 +38,6 @@ while connected:
         connected = False
     c.send(message.encode())
     
-    message = c.recv(1024)
+    message = c.recv(buff)
     message = message.decode()
     print(c_name , '> ',message)
