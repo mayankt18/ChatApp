@@ -41,3 +41,4 @@ while connected:
     message = c.recv(buff)
     message = message.decode()
     print(c_name , '> ',message)
+s.close()
