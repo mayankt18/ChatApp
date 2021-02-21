@@ -46,7 +46,7 @@ class Server:
 
             cThread.start()
 
-            iThread = threading.Thread(target=self.send_msg, args=(c , a))
+            iThread = threading.Thread(target=self.send_msg, args=(c, a))
 
             iThread.daemon = True
 
@@ -60,33 +60,21 @@ class Client:
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def send_msg(self):  #for sending messages
+    def send_msg(self, connected):  #for sending messages
 
-        while True:
+        while connected:
+            msg = input("")
+            
+            self.sock.send(bytes(msg, 'utf-8'))
 
-            self.sock.send(bytes(input(""), 'utf-8'))
-
-    def handler(self, sock):  # for receiving messages
-
-        while True:
-
-            data = sock.recv(1024)
-
-            print(str(data, 'utf-8'))
 
     def __init__(self, address):
 
         self.sock.connect((address, 1234))
 
-        cThread = threading.Thread(target=self.handler, args=[self.sock])
+        connected = True
 
-        cThread.daemon = True
-
-        cThread.start()
-
-
-
-        iThread = threading.Thread(target=self.send_msg)
+        iThread = threading.Thread(target=self.send_msg, args=[connected])
 
         iThread.daemon = True
 
@@ -94,11 +82,10 @@ class Client:
 
         
 
-        while True:
+        while connected:
 
             data = self.sock.recv(1024)
 
-        
             print(str(data, 'utf-8'))
 
 
