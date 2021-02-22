@@ -1,12 +1,18 @@
 import socket
 
+from tkinter import *
+
 import threading
 
 import sys
 
 
-
 class Server:
+    window = Tk()
+
+    window.title("chat app")
+
+
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -24,7 +30,7 @@ class Server:
 
         while True:
 
-            data = c.recv(1024)
+            data = c.recv(20)
 
             print(str(data, 'utf-8'))
 
@@ -41,7 +47,9 @@ class Server:
 
         print("Listening for connections...")
 
-        while True:
+        running = True
+
+        while running:
 
             c, a = self.sock.accept()
 
@@ -56,6 +64,8 @@ class Server:
             iThread.daemon = True
 
             iThread.start()
+
+            if 
 
             print(str(a[0]) + ':' + str(a[1]), " connected.")
 
@@ -91,18 +101,82 @@ class Client:
 
         while connected:
 
-            data = self.sock.recv(1024)
+            data = self.sock.recv(20)
 
             print(str(data, 'utf-8'))
 
 
+class TServer:
 
-if (len(sys.argv) > 1):
+    def __init__(self, port, filename):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        self.filename = filename
+
+        self.port = port
+
+        self.file = open(filename, 'rb')
+
+        self.filedata = self.file.read(1024)
+
+        self.sock.bind(('0.0.0.0', self.port))
+
+        self.sock.listen(1)
+
+        while True:
+
+            c , a = self.sock.accept()
+        
+            c.send(self.filedata)
+
+            c.close()
+
+            break
+
+        print("file has been sent sucessfully...")
+
+
+class TClient:
+    
+    def __init__(self, address, port, filename):
+        
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        self.filename = filename
+
+        self.sock.connect((address, 1234))
+
+        while True:
+
+            file = open(filename, 'wb')
+            
+            file_data = self.sock.recv(1024)
+
+            file.write(file_data)
+
+            file.close()
+
+            break
+
+        print("file has been received sucessfully...")
+
+#for sending = python xyz.py port filename
+#for receiving = python xyz.py ip port filename
+
+        
+if (len(sys.argv) == 2):
 
     client = Client(sys.argv[1])
 
-else:
+elif (len(sys.argv) == 1):
 
     server = Server()
 
     server.run()
+
+elif (len(sys.argv) == 3):
+    
+    sender = TServer(int(sys.argv[1]), sys.argv[2])
+
+else:
+    receiver = TClient(sys.argv[1], int(sys.argv[2]), sys.argv[3])
