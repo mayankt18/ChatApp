@@ -1,2 +1,2 @@
-# chat_app
+# ChatApp
 p2p chat app
